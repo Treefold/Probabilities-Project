@@ -216,7 +216,7 @@ fvernecor <- function (xycor, xyind) {
   # corelatia = 0 fara sa fie independente
 }
 
-solve <- function  (n, m) {
+solveBonus <- function  (n, m) {
   xv <- rep (0, times = n)
   yv <- rep (0, times = m)
   
@@ -287,4 +287,4 @@ solve <- function  (n, m) {
   print (paste ("Subpunctul d) 2) Corelanta:", msg))
 }
 
-solve (5, 4)
+solveBonus (5, 4)
