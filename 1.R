@@ -6,9 +6,8 @@ newLine <- function () {
 }
 justTheString <- function (str) {
   blank <- matrix()
-  rownames(blank) <- ""
+  rownames(blank) <- str
   colnames(blank) <- ""
-  blank[1,1] <- str
   print(blank, na.print = "")
 }
 
