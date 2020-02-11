@@ -1,3 +1,14 @@
+library(rmutil)
+
+plorBrow <- function (n = 100) {
+  plot(cumsum(rnorm(n)), cumsum(rnorm(n)), 
+       type = "o", pch = 16, lwd = 2,
+       xlab = "", ylab = "", 
+       axes = FALSE,
+       main = "Brownian Motion")
+  box()
+}
+
 plotLevy <- function(n = 100) {
   plot(cumsum(rt(n, df=2)), cumsum(rt(n, df=2)), 
        type = "o", pch = 16, lwd = 2,
@@ -7,30 +18,70 @@ plotLevy <- function(n = 100) {
   box()
 }
 
-dLevy <- function (y, m = 0, s = 1) {
-  return (sqrt(s/(2*pi*(y-m)^3))*exp(-s/(2*(y-m))))
-}
-
-mLevy <- function (x, m = 0, s = 1) {
-  return (integrate(dLevy, lower=m, upper=y, y=y, m=m, s=s)$value)
-}
-
 plotLevy()
+plorBrow()
 
 par(mar=c(2,2,2,2))
-op<-par(mfrow=c(1,2))
+op<-par(mfrow=c(2,2))
 
-x <- seq(1, 5, length=100)
-plot(x, dLevy(x), type="l", lty=2, main="Densitatea")
-lines(x, dLevy(x), lwd=2, col="red")
-plot(x, mLevy(x), type="l", lty=2, main="Masa")
-lines(x, mLevy(x), lwd=2, col="red")
+x <- seq(1, 5, length=1000)
+plot (x, dlevy(x, 2/3), type="l", lty=2)
+lines(x, dlevy(x), lwd=2, col="red")
+lines(x, dlevy(x, 1/3), lwd=2, col="blue")
+lines(x, dlevy(x, 2/3), lwd=2, col="green")
+legend("topright", 
+       legend = c("m=0,    d = 0", 
+                  "m=1/3, d = 0",
+                  "m=2/3, d = 0"), 
+       col = c("red", "blue", "green"), 
+       pch = c(19,19, 19), 
+       bty = "n", 
+       pt.cex = 2, 
+       cex = 0.8)
 
-# intergrand f
-f <- function(r,x = 1) x*exp(-r)   # order of arguments reversed
-# integral
-h <- function(x) integrate(dLevy, lower=1, upper=x, m = 1)$value
-g <- Vectorize(h)
-plot(x,g(x), col="red")
+plot (x, dlevy(x, 1/2, 1), type="l", lty=2)
+lines(x, dlevy(x, 1/2, 1), lwd=2, col="red")
+lines(x, dlevy(x, 1/2, 2), lwd=2, col="blue")
+lines(x, dlevy(x, 1/2, 3), lwd=2, col="green")
+legend("topright", 
+       legend = c("m=1/2, d = 1", 
+                  "m=1/2, d = 2",
+                  "m=1/2, d = 3"), 
+       col = c("red", "blue", "green"), 
+       pch = c(19,19, 19), 
+       bty = "n", 
+       pt.cex = 2, 
+       cex = 0.8)
 
+plot (c(1,5), c(plevy(1, 1/2, 3), plevy(5, 1/3)), lty=2)
+lines(x, plevy(x), lwd=2, col="red")
+lines(x, plevy(x, 1/3), lwd=2, col="blue")
+lines(x, plevy(x, 2/3), lwd=2, col="green")
+legend("bottomright", 
+       legend = c("m=0,    d = 0", 
+                  "m=1/3, d = 0",
+                  "m=2/3, d = 0"), 
+       col = c("red", "blue", "green"), 
+       pch = c(19,19, 19), 
+       bty = "n", 
+       pt.cex = 2, 
+       cex = 0.8)
+
+plot (c(1,5), c(0, plevy(5, 1/2, 1)), lty=2)
+lines(x, plevy(x, 1/2, 1), lwd=2, col="red")
+lines(x, plevy(x, 1/2, 2), lwd=2, col="blue")
+lines(x, plevy(x, 1/2, 3), lwd=2, col="green")
+legend("topleft", 
+       legend = c("m=1/2, d = 1", 
+                  "m=1/2, d = 2",
+                  "m=1/2, d = 3"), 
+       col = c("red", "blue", "green"), 
+       pch = c(19,19, 19), 
+       bty = "n", 
+       pt.cex = 2, 
+       cex = 0.8)
+
+legend()
 par(op)
+
+

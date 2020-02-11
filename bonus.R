@@ -1,12 +1,14 @@
-newLine <- function () {
+newLine <- function () { # functie pentru linie libera
   blank <- matrix()
   rownames(blank) <- ""
   colnames(blank) <- ""
   print(blank, na.print = "")
 }
 
-rand <- function (n) {return (floor(runif(1, min=1, max=n+1)))}
+# fuctie pentru a returna un singur numar intreg random intre 1 si n 
+rand <- function (n) {return (floor(runif(1, min=1, max=n+1)))} 
 
+# genereaza o repartitie comuna valida
 GenerateCompliteTable <- function (n, m) {
   tab <- matrix(runif((n+1) * (m+1)), nrow = n+1, ncol = m+1)
   tab[, m+1] <- rep(0, times=n+1)
@@ -24,6 +26,7 @@ GenerateCompliteTable <- function (n, m) {
   return (tab)
 }
 
+# verifica daca scotand aceasta celula se mai poate completa tabelul
 posValid <- function (i, j, n, m, tab) {
   linie   = length (which(is.na(tab[1:n,j])))
   coloana = length (which(is.na(tab[i,1:m])))
@@ -31,11 +34,12 @@ posValid <- function (i, j, n, m, tab) {
 }
 
 frepcomgen <- function (n, m) {
-  tab <- GenerateCompliteTable(n, m)
+  tab <- GenerateCompliteTable(n, m) # genereaza o repartitie comuna valida
   # print (tab) # uncomment pentru a putea vedea matricea originala si a verifica raspunsul de la b
   
   n <- n+1
   m <- m+1
+  # strica repartitia = sterge elemente
   for (x in 1:(n*m)) {
     i <- rand (n)
     j <- rand (m)
@@ -47,6 +51,7 @@ frepcomgen <- function (n, m) {
   return (tab)
 }
 
+# nestiind repartitia initiala, completeaz+o
 fcomplrepcom <- function (n, m, tab) {
   tab[n+1,m+1] <- 1
   again <- 0
@@ -134,6 +139,7 @@ fcomplrepcom <- function (n, m, tab) {
   else {return (tab)}
 }
 
+# inmultirea a doua variabile aleatoare
 prod <- function (xv, xp, yv, yp) {
   xyv <- c()
   xyp <- c()
@@ -165,6 +171,7 @@ prod <- function (xv, xp, yv, yp) {
   return (list(xyv,xyp))
 }
 
+# functie pentru afisearea unei repartitii
 afiseaza <- function (name, v, p) {
   
   print (paste0("Repartitia lui ", name, ":"))
@@ -179,6 +186,7 @@ afiseaza <- function (name, v, p) {
   #print (af)
 }
 
+# media unei variabile
 media <- function (v, p) {
   s <- 0
   for (i in 1:length(v)) {
@@ -187,6 +195,7 @@ media <- function (v, p) {
   return (s)
 }
 
+# covarianta a 2 variabile aleatoare
 cov <- function (xv, xp, yv, yp) {
   
   xy  <- prod(xv, xp, yv, yp)
@@ -199,6 +208,7 @@ cov <- function (xv, xp, yv, yp) {
   return (mxy - mx * my)
 }
 
+# testeaza independenta a 2 variabile aleatoare stiind covarianta
 fverind <- function (n, m, tab, xycov) {
   if (xycov != 0.0) {return (FALSE)}
   for (i in 1:n) {
@@ -211,9 +221,9 @@ fverind <- function (n, m, tab, xycov) {
   return (TRUE)
 }
 
-fvernecor <- function (xycor, xyind) {
-  return (xycor == 0 && xyind == FALSE) 
-  # corelatia = 0 fara sa fie independente
+# testeaza corelanta a 2 variabile aleatoare stiind covarianta lor
+fvernecor <- function (xycor) {
+  return (xycor == 0) 
 }
 
 solveBonus <- function  (n, m) {
@@ -277,11 +287,10 @@ solveBonus <- function  (n, m) {
   print (paste ("Subpunctul c) 3) P (X > 6 , Y < 7) =", pc))
   
   newLine()
-  xyind <- fverind(n, m, tab, xycov)
-  if (xyind) {msg <- "Independete"}
+  if (fverind(n, m, tab, xycov)) {msg <- "Independete"}
   else       {msg <- "Dependente"}
   print (paste ("Subpunctul d) 1) Dependenta:", msg))
-  if (fvernecor(xycov, xyind))  
+  if (fvernecor(xycov))  
        {msg <- "Necorelate"}
   else {msg <- "Corelate"}                       
   print (paste ("Subpunctul d) 2) Corelanta:", msg))
